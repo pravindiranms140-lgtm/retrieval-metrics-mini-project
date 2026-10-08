@@ -35,11 +35,8 @@ Recall@10 = (queries whose correct answer is in the top 10) / (total queries)
 node eval.js
 ```
 
-## Expected output
+## Results
 
-A correct `eval.js` prints exactly this table. If your numbers differ, your metric code has a bug.
-
-```text
 | Query | Keyword rank | Semantic rank |
 |---|---|---|
 | my redis cache keeps showing old data | 8 | 1 |
@@ -53,15 +50,10 @@ A correct `eval.js` prints exactly this table. If your numbers differ, your metr
 | sql or nosql for a new product | 1 | 3 |
 | why does my redis memory keep climbing | miss | 2 |
 | **Summary** | **MRR 0.30 · Recall@10 0.60** | **MRR 0.67 · Recall@10 1.00** |
-```
 
-## Write up your findings
+## Findings and Interpretation
 
-Add a short interpretation (4 to 6 sentences) to this README or a `RESULT.md`:
-- Which system is better overall, and on which metric(s)?
-- Which queries did keyword search win, and what do those queries have in common?
-- Which queries did semantic search win, and what do those have in common?
-- One sentence on why a team would still keep the weaker system around (hint: the two systems win on different queries).
+Semantic search outperforms keyword search by a wide margin across both metrics, achieving an MRR of 0.67 compared to 0.30 and achieving a perfect Recall@10 of 1.00 compared to 0.60. Keyword search performed better on exact comparison queries—specifically "redis or memcached for caching" (rank 1 vs. 2) and "sql or nosql for a new product" (rank 1 vs. 3)—which both contain specific, well-defined technical keywords that directly match the post titles verbatim. In contrast, semantic search dominated conversational, descriptive, and symptom-focused queries such as "why does my redis memory keep climbing", "my background jobs stop after every deploy", and "why did my query get slower after I added an index", where users articulated problems in natural language rather than standard technical terminology. While keyword search suffered four total misses due to this vocabulary mismatch, semantic search successfully mapped the underlying user intent to relevant post concepts and returned a correct result in the top three for every single query. Engineering teams often maintain the keyword search system alongside semantic search in a hybrid retrieval architecture because exact keyword and token matching remains indispensable for acronyms, specific error messages, and precise product names where vector embeddings can sometimes lose specificity.
 
 ## Take it further (optional)
 
